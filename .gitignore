@@ -1,1 +1,15 @@
 .DS_Store
+
+# Generated artifacts (may contain private transcripts/secrets) — never commit
+out/
+**/out/
+*.distilled.jsonl
+dashboard.html
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Local caches
+.cache/
