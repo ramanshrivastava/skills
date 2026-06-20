@@ -1,0 +1,21 @@
+{
+  "name": "ramanshrivastava-skills",
+  "owner": {
+    "name": "Raman Shrivastava"
+  },
+  "metadata": {
+    "description": "Agent skills for software engineering with AI agents (SDLC with Agents).",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "productivity",
+      "description": "Workflow and meta-productivity skills for AI-assisted development.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/productivity/mine-logs-for-skills"
+      ]
+    }
+  ]
+}
