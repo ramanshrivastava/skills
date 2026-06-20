@@ -117,11 +117,14 @@ def main():
                 f'<span class="num">{months[m]:,}</span></div>')
     mhtml = "\n".join(mrows) or '<div class="empty">no dates</div>'
 
-    # optional install bar (terminal-style) + repo footer tag
-    install_html = (
-        f'<div class="install"><span class="prompt">$</span> '
-        f'<span class="cmd">{html.escape(a.install_cmd)}</span></div>'
-        if a.install_cmd else "")
+    # optional install bar (terminal-style, one line per command) + repo footer tag
+    if a.install_cmd:
+        ilines = "".join(
+            f'<div class="iline"><span class="prompt">$</span> <span class="cmd">{html.escape(l)}</span></div>'
+            for l in a.install_cmd.split("\n") if l.strip())
+        install_html = f'<div class="install">{ilines}</div>'
+    else:
+        install_html = ""
     repo_html = (f' · <span class="repo">github.com/{html.escape(a.repo)}</span>'
                  if a.repo else "")
 
@@ -136,8 +139,9 @@ body{{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 -apple-system,
 .wrap{{max-width:940px;margin:0 auto;padding:64px 48px 72px}}
 .logo{{font-size:30px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;background:linear-gradient(90deg,#cba6f7,#b4befe);-webkit-background-clip:text;background-clip:text;color:transparent}}
 .sub{{color:var(--mut);margin:10px 0 0;font-size:14px}}
-.install{{margin:28px 0 48px;padding:14px 18px;background:var(--card);border-radius:12px;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
-.install .prompt{{color:#a6e3a1;margin-right:10px}}
+.install{{margin:28px 0 48px;padding:16px 18px;background:var(--card);border-radius:12px;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}}
+.install .iline{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.9}}
+.install .prompt{{color:#a6e3a1;margin-right:10px;user-select:none}}
 .install .cmd{{color:var(--fg)}}
 .kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;padding-bottom:44px;border-bottom:1px solid var(--line);margin-bottom:48px}}
 .kpi .v{{font-size:42px;font-weight:600;letter-spacing:-.03em;line-height:1}}
