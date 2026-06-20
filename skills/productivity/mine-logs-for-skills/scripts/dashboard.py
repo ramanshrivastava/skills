@@ -100,8 +100,9 @@ def main():
             months[str(end)[:7]] += 1
     projects = len({r.get("project") for r in recs})
 
-    palette = ["#7c9cff", "#5ed6c0", "#f7b955", "#ff7b9c", "#b78bff", "#6fd0ff",
-               "#9ae66e", "#ffd166", "#ef8e8e", "#8ec7ff"]
+    # Catppuccin Mocha accents: mauve, blue, teal, peach, pink, sky, green, yellow, maroon, lavender
+    palette = ["#cba6f7", "#89b4fa", "#94e2d5", "#fab387", "#f5c2e7", "#89dceb",
+               "#a6e3a1", "#f9e2af", "#eba0ac", "#b4befe"]
 
     # source split chips
     src_chips = " ".join(
@@ -116,7 +117,7 @@ def main():
             pct = round(100 * months[m] / mmax, 1)
             mrows.append(
                 f'<div class="row"><span class="lbl">{html.escape(m)}</span>'
-                f'<span class="track"><span class="fill" style="width:{pct}%;background:#7c9cff"></span></span>'
+                f'<span class="track"><span class="fill" style="width:{pct}%;background:#cba6f7"></span></span>'
                 f'<span class="num">{months[m]:,}</span></div>')
     mhtml = "\n".join(mrows) or '<div class="empty">no dates</div>'
 
@@ -131,9 +132,9 @@ def main():
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Log Miner — Dashboard</title>
+<title>RAMAN SKILLS — Agent Log Dashboard</title>
 <style>
-:root{{--bg:#0d0f14;--card:#161a23;--line:#242a36;--fg:#e6e9ef;--mut:#8b93a7}}
+:root{{--bg:#11111b;--card:#1e1e2e;--line:#313244;--fg:#cdd6f4;--mut:#a6adc8;--track:#181825}}
 *{{box-sizing:border-box}}
 body{{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}}
 .wrap{{max-width:1080px;margin:0 auto;padding:32px 20px 64px}}
@@ -151,21 +152,22 @@ h1{{font-size:22px;margin:0 0 4px;letter-spacing:-.02em}}
 .panel h2{{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 14px}}
 .row{{display:grid;grid-template-columns:160px 1fr 56px;align-items:center;gap:10px;margin:7px 0}}
 .lbl{{color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}}
-.track{{background:#0d0f14;border-radius:6px;height:14px;overflow:hidden}}
+.track{{background:var(--track);border-radius:6px;height:14px;overflow:hidden}}
 .fill{{display:block;height:100%;border-radius:6px}}
 .num{{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums}}
 .empty{{color:var(--mut)}}
 .full{{grid-column:1 / -1}}
 .foot{{color:var(--mut);margin-top:24px;font-size:12px}}
 .install{{background:#0a0c11;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 0 22px;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
-.install .prompt{{color:#5ed6c0;margin-right:8px;font-weight:700}}
-.install .cmd{{color:#e6e9ef}}
-.repo{{color:#7c9cff}}
+.install .prompt{{color:#a6e3a1;margin-right:8px;font-weight:700}}
+.install .cmd{{color:var(--fg)}}
+.repo{{color:#89b4fa}}
+.logo{{font-size:36px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 4px;background:linear-gradient(90deg,#cba6f7,#f5c2e7,#89b4fa,#94e2d5);-webkit-background-clip:text;background-clip:text;color:transparent}}
 @media(max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}.row{{grid-template-columns:120px 1fr 48px}}}}
 </style></head>
 <body><div class="wrap">
-<h1>Agent Log Miner</h1>
-<p class="sub">Distilled from your Claude Code + OpenAI Codex transcripts · aggregates only</p>
+<h1 class="logo">RAMAN SKILLS</h1>
+<p class="sub">Agent log miner · distilled from Claude Code + OpenAI Codex transcripts · aggregates only</p>
 {install_html}
 <div class="kpis">
   <div class="kpi"><div class="v">{sessions:,}</div><div class="k">Sessions</div></div>
