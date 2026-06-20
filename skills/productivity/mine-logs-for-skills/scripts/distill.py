@@ -65,8 +65,10 @@ def distill_claude_file(jf: Path, max_chars: int, min_chars: int):
             title = title or d.get("aiTitle")
             ts = d.get("timestamp")
             if ts:
-                ts_first = ts_first or ts
-                ts_last = ts
+                # ISO-8601/Z strings sort chronologically; use min/max so a
+                # resumed or out-of-order log can't yield ended < started.
+                ts_first = ts if ts_first is None else min(ts_first, ts)
+                ts_last = ts if ts_last is None else max(ts_last, ts)
             if _claude_is_user_prompt(d):
                 s = d["message"]["content"].strip()
                 if len(s) >= min_chars and not s.startswith(NOISE_PREFIXES):
@@ -109,8 +111,10 @@ def distill_codex_file(jf: Path, max_chars: int, min_chars: int):
             p = d.get("payload") if isinstance(d.get("payload"), dict) else {}
             ts = d.get("timestamp")
             if ts:
-                ts_first = ts_first or ts
-                ts_last = ts
+                # ISO-8601/Z strings sort chronologically; use min/max so a
+                # resumed or out-of-order log can't yield ended < started.
+                ts_first = ts if ts_first is None else min(ts_first, ts)
+                ts_last = ts if ts_last is None else max(ts_last, ts)
 
             if t == "session_meta":
                 cwd = cwd or p.get("cwd")
@@ -119,7 +123,8 @@ def distill_codex_file(jf: Path, max_chars: int, min_chars: int):
                 if isinstance(git, dict):
                     branch = branch or git.get("branch")
             elif t == "event_msg" and p.get("type") == "user_message":
-                s = (p.get("message") or "").strip()
+                msg = p.get("message")  # may be non-str in some Codex versions
+                s = msg.strip() if isinstance(msg, str) else ""
                 if len(s) >= min_chars and not s.startswith(NOISE_PREFIXES):
                     prompts.append(s[:max_chars])
             # Tool calls appear EITHER as top-level type=function_call OR as a
@@ -132,7 +137,9 @@ def distill_codex_file(jf: Path, max_chars: int, min_chars: int):
 
     if not prompts and not tool_counts:
         return None
-    return _record("codex", jf, cwd or jf.parent.name, branch, version, title,
+    # Codex parent dir is a day bucket (e.g. "20") — useless as a project key and
+    # collides across dates; fall back to a unique per-file sentinel instead.
+    return _record("codex", jf, cwd or f"unknown:{jf.stem}", branch, version, title,
                    ts_first, ts_last, prompts, tool_counts, tool_seq, collections.Counter())
 
 
@@ -187,7 +194,9 @@ def main():
                 records.append(r)
 
     if a.since:
-        records = [r for r in records if not (r.get("ended") and r["ended"][:10] < a.since)]
+        # Keep only sessions with a known end date at/after the cutoff; undated
+        # sessions can't be confirmed recent, so they're excluded when --since is set.
+        records = [r for r in records if r.get("ended") and r["ended"][:10] >= a.since]
 
     with (out_dir / "distilled.jsonl").open("w", encoding="utf-8") as fh:
         for r in records:

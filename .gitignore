@@ -3,7 +3,8 @@
 # Generated artifacts (may contain private transcripts/secrets) — never commit
 out/
 **/out/
-*.distilled.jsonl
+distilled.jsonl
+corpus.md
 dashboard.html
 
 # Python

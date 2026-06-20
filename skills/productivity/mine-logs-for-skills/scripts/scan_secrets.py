@@ -21,8 +21,10 @@ PATTERNS = [
     ("PyPI token",           re.compile(r"pypi-[A-Za-z0-9_-]{50,}")),
     ("OpenAI/sk key",        re.compile(r"sk-[A-Za-z0-9]{20,}")),
     ("ElevenLabs key",       re.compile(r"sk_[a-f0-9]{40,}")),
-    ("Deepgram key",         re.compile(r"\b[a-f0-9]{40}\b")),
-    ("wandb key",            re.compile(r"wandb_[A-Za-z0-9_-]{40,}|\b[a-f0-9]{40}\b")),
+    ("wandb key",            re.compile(r"wandb_[A-Za-z0-9_-]{40,}")),
+    # Bare 40-char hex matches Deepgram/wandb-style keys BUT also git SHAs and
+    # sha256 hashes — one low-confidence label so each hit is counted once.
+    ("40-hex (low-confidence: key or git SHA)", re.compile(r"\b[a-f0-9]{40}\b")),
     ("Cloudflare API token", re.compile(r"cf[a-z]*_[A-Za-z0-9_-]{30,}|cfut_[A-Za-z0-9]{30,}")),
     ("Svix webhook secret",  re.compile(r"whsec_[A-Za-z0-9+/=]{20,}")),
     ("AWS access key",       re.compile(r"AKIA[0-9A-Z]{16}")),

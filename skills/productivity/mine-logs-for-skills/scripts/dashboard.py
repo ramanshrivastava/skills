@@ -28,7 +28,7 @@ def load(path: Path):
 
 def bar_rows(counter, top, palette):
     items = counter.most_common(top)
-    mx = max((n for _, n in items), default=1)
+    mx = max((n for _, n in items), default=1) or 1  # `or 1`: non-empty all-zero → no div-by-zero
     out = []
     for i, (label, n) in enumerate(items):
         pct = round(100 * n / mx, 1)
@@ -89,7 +89,7 @@ def main():
         for m in sorted(months):
             pct = round(100 * months[m] / mmax, 1)
             mrows.append(
-                f'<div class="row"><span class="lbl">{m}</span>'
+                f'<div class="row"><span class="lbl">{html.escape(m)}</span>'
                 f'<span class="track"><span class="fill" style="width:{pct}%;background:#7c9cff"></span></span>'
                 f'<span class="num">{months[m]:,}</span></div>')
     mhtml = "\n".join(mrows) or '<div class="empty">no dates</div>'
