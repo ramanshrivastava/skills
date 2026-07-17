@@ -16,6 +16,15 @@
       "skills": [
         "./skills/productivity/mine-logs-for-skills"
       ]
+    },
+    {
+      "name": "engineering",
+      "description": "Skills for building software with teams of AI agents.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/engineering/milestone-orchestration"
+      ]
     }
   ]
 }

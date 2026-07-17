@@ -10,7 +10,7 @@ Part of [SDLC with Agents](https://github.com/ramanshrivastava/sdlcwithagents).
 [![License: MIT](https://img.shields.io/badge/License-MIT-cba6f7?style=flat-square)](./LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-94e2d5?style=flat-square)](https://code.claude.com)
 [![Codex](https://img.shields.io/badge/OpenAI-Codex-fab387?style=flat-square)](https://openai.com/codex)
-[![Skills](https://img.shields.io/badge/skills-1-89b4fa?style=flat-square)](#-skills)
+[![Skills](https://img.shields.io/badge/skills-2-89b4fa?style=flat-square)](#-skills)
 
 </div>
 
@@ -40,6 +40,12 @@ cp -r skills/skills/productivity/mine-logs-for-skills ~/.claude/skills/
 ```
 
 ## ▸ Skills
+
+### engineering
+
+| Skill | What it does |
+|-------|--------------|
+| [**milestone-orchestration**](./skills/engineering/milestone-orchestration/SKILL.md) | Run a large, correctness-critical build (port, rewrite, serializer, migration) as a **team of agents** — a coordinator that never writes bulk code dispatches one agent per milestone, and every PR passes a **merge gate** whose adversarial half finds the bugs green tests miss. |
 
 ### productivity
 
