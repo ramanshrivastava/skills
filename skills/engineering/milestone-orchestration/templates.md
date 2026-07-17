@@ -98,13 +98,17 @@ When one milestone won't fit a single context, the milestone agent decomposes it
 into **independent module clusters** and runs each in its own git worktree.
 
 ```bash
-# one worktree + branch per independent cluster
-git worktree add -b <milestone>-clusterA ../wt-clusterA main
-git worktree add -b <milestone>-clusterB ../wt-clusterB main
+# Branch clusters off the MILESTONE branch, not main, so each cluster sees the
+# scaffolding, shared interfaces, and config the milestone agent already
+# committed. (Commit that shared groundwork before cutting clusters.)
+git worktree add -b <milestone>-clusterA ../wt-clusterA <milestone>
+git worktree add -b <milestone>-clusterB ../wt-clusterB <milestone>
 # dispatch one subagent per worktree (Agent tool, worktree isolation)
 # ... each works, commits, and reports back ...
 
-# milestone agent merges the branches back and runs the milestone DoD on the union
+# milestone agent merges the branches back onto the milestone branch and runs
+# the milestone DoD on the union
+git switch <milestone>
 git merge <milestone>-clusterA <milestone>-clusterB
 git worktree remove ../wt-clusterA && git worktree remove ../wt-clusterB
 ```
